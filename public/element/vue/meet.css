@@ -1,0 +1,47 @@
+.meet_main{border:1px solid #ebeef5}.meet_main,.meet_main td{font-family:Tahoma,Arial,Helvetica,sans-serif;font-size:16px}
+.meet_event{color:#333}.meet_event_inner{position:absolute;left:0;right:0;top:0;bottom:0;margin:0;overflow:hidden;background-color:#e6dff7;padding:2px;border:1px solid #7b55cf;display:flex;align-items:center}
+.meet_timeheadergroup,.meet_timeheadercol{color:#333;background:#fff}.meet_rowheader,.meet_corner{color:#333;background:#fff}
+.meet_rowheader_inner{position:absolute;left:0;right:0;top:0;bottom:0;padding:10px;display:flex;align-items:center}
+.meet_timeheadergroup_inner,.meet_timeheadercol_inner{position:absolute;left:0;right:0;top:0;bottom:0;border-right:1px solid #ebeef5;padding:10px;display:flex;align-items:center;justify-content:center}
+.meet_timeheadergroup_inner{border-bottom:1px solid #ebeef5}.meet_divider,.meet_splitter,.meet_divider_horizontal,.meet_resourcedivider{background-color:#ebeef5}
+.meet_matrix_vertical_line,.meet_matrix_horizontal_line{background-color:#ebeef5}
+.meet_cell{background:#f9f9f9}.meet_cell.meet_cell_business{background:#fff}.meet_message{padding:10px;opacity:.9;filter:alpha(opacity=90);color:#fff;background:#ffa216}
+.meet_shadow_inner{background-color:#666;opacity:.5;filter:alpha(opacity=50);height:100%}
+.meet_matrix_vertical_break{background-color:#000}.meet_tree_image_no_children{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAIAAABv85FHAAAAKXRFWHRDcmVhdGlvbiBUaW1lAHDhIDMwIEkgMjAwOSAwODo0NjozMSArMDEwMClDkt4AAAAHdElNRQfZAR4HLzEyzsCJAAAACXBIWXMAAA7CAAAOwgEVKEqAAAAABGdBTUEAALGPC/xhBQAAADBJREFUeNpjrK6s5uTl/P75OybJ0NLW8h8bAIozgeSxAaA4E1A7VjmgOL31MeLxHwCeXUT0WkFMKAAAAABJRU5ErkJggg==)}
+.meet_tree_image_expand{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAIAAABv85FHAAAAKXRFWHRDcmVhdGlvbiBUaW1lAHDhIDMwIEkgMjAwOSAwODo0NjozMSArMDEwMClDkt4AAAAHdElNRQfZAR4HLyUoFBT0AAAACXBIWXMAAA7CAAAOwgEVKEqAAAAABGdBTUEAALGPC/xhBQAAAFJJREFUeNpjrK6s5uTl/P75OybJ0NLW8h8bAIozgeRhgJGREc4GijMBtTNgA0BxFog+uA4IA2gmUJwFog/IgUhAGBB9KPYhA3T74Jog+hjx+A8A1KRQ+AN5vcwAAAAASUVORK5CYII=)}
+.meet_tree_image_collapse{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAIAAABv85FHAAAAKXRFWHRDcmVhdGlvbiBUaW1lAHDhIDMwIEkgMjAwOSAwODo0NjozMSArMDEwMClDkt4AAAAHdElNRQfZAR4HLxB+p9DXAAAACXBIWXMAAA7CAAAOwgEVKEqAAAAABGdBTUEAALGPC/xhBQAAAENJREFUeNpjrK6s5uTl/P75OybJ0NLW8h8bAIozgeSxAaA4E1A7VjmgOAtEHyMjI7IE0EygOAtEH5CDqY9c+xjx+A8ANndK9WaZlP4AAAAASUVORK5CYII=)}
+.meet_columnheader_inner{font-weight:bold}.meet_columnheader_cell{background:linear-gradient(to right,#eee 0,#ddd)}
+.meet_columnheader_splitter{background-color:#666;opacity:.5;filter:alpha(opacity=50)}
+.meet_columnheader_cell_inner{padding:2px}.meet_timeheader_float{display:flex;align-items:center;justify-content:center}
+.meet_timeheader_float_inner{padding:10px}.meet_event_float{display:flex;align-items:center}
+.meet_event_float_inner{padding:3px 2px 2px 7px;padding-left:9px;position:relative}
+.meet_event_float_inner:after{content:"";border-color:transparent #333 transparent transparent;border-style:solid;border-width:5px;width:0;height:0;position:absolute;top:5px;left:-4px}
+.meet_event_move_left{box-sizing:border-box;padding:2px;border:1px solid #ccc;background:#fff;background:linear-gradient(to bottom,#fff 0,#eee)}
+.meet_event_move_right{box-sizing:border-box;padding:2px;border:1px solid #ccc;background:#fff;background:linear-gradient(to bottom,#fff 0,#eee)}
+.meet_event_delete{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjExR/NCNwAAAI5JREFUKFNtkLERgCAMRbmzdK8s4gAUlhYOYEHJEJYOYOEwDmGBPxC4kOPfvePy84MGR0RJ2N1A8H3N6DATwSQ57m2ql8NBG+AEM7D+UW+wjdfUPgerYNgB5gOLRHqhcasg84C2QxPMtrUhSqQIhg7ypy9VM2EUZPI/4rQ7rGxqo9sadTegw+UdjeDLAKUfhbaQUVPIfJYAAAAASUVORK5CYII=) center center no-repeat;opacity:.6;-ms-filter:'alpha(opacity=60)';cursor:pointer;opacity:.6}
+.meet_event_delete:hover{opacity:1;-ms-filter:none}.meet_rowmove_handle{background-repeat:no-repeat;background-position:center center;background-color:#ccc;background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAKCAYAAACT+/8OAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjExR/NCNwAAAClJREFUGFdj+P//P4O9vX2Bg4NDP4gNFgBytgPxebgAMsYuQGMz/jMAAFsTZDPYJlDHAAAAAElFTkSuQmCC);cursor:move}
+.meet_rowmove_source{background-color:black;opacity:.2}.meet_rowmove_position_before,.meet_rowmove_position_after{background-color:#999;height:2px}
+.meet_rowmove_position_child{margin-left:10px;background-color:#999;height:2px}.meet_rowmove_position_child:before{content:'+';color:#999;position:absolute;top:-8px;left:-10px}
+.meet_rowmove_position_forbidden{background-color:red;height:2px;margin-left:10px}
+.meet_rowmove_position_forbidden:before{content:'x';color:red;position:absolute;top:-8px;left:-10px}
+.meet_link_horizontal{border-bottom-style:solid;border-bottom-color:red}.meet_link_vertical{border-right-style:solid;border-right-color:red}
+.meet_link_arrow_right:before{content:'';border-width:6px;border-color:transparent transparent transparent red;border-style:solid;width:0;height:0;position:absolute}
+.meet_link_arrow_left:before{content:'';border-width:6px;border-color:transparent red transparent transparent;border-style:solid;width:0;height:0;position:absolute}
+.meet_link_arrow_down:before{content:'';border-width:6px;border-color:red transparent transparent transparent;border-style:solid;width:0;height:0;position:absolute}
+.meet_link_arrow_up:before{content:'';border-width:6px;border-color:transparent transparent red transparent;border-style:solid;width:0;height:0;position:absolute}
+.meet_shadow_overlap .meet_shadow_inner{background-color:red}.meet_overlay{background-color:gray;opacity:.5;filter:alpha(opacity=50)}
+.meet_event_group{box-sizing:border-box;font-size:12px;color:#666;padding:2px 2px 2px 2px;overflow:hidden;border:1px solid #ccc;background-color:#fff}
+.meet_header_icon{box-sizing:border-box;border:1px solid #ebeef5;background-color:#fff;color:#333}
+.meet_header_icon:hover{background-color:#fafafa}.meet_header_icon_hide:before{content:'\00AB'}
+.meet_header_icon_show:before{content:'\00BB'}.meet_rowheader.meet_rowheader_selected{background-color:#aaa;background-image:linear-gradient(45deg,rgba(255,255,255,.2) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.2) 50%,rgba(255,255,255,.2) 75%,transparent 75%,transparent);background-size:20px 20px}
+.meet_row_new .meet_rowheader_inner{cursor:text;background-position:0 5px;background-repeat:no-repeat;background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABUSURBVChTY0ACslAaK2CC0iCQDMSlECYmQFYIAl1AjFUxukIQwKoYm0IQwFCMSyEIaEJpMMClcD4Qp0CYEIBNIUzRPzAPCtAVYlWEDgyAGIdTGBgAbqEJYyjqa3oAAAAASUVORK5CYII=)}
+.meet_row_new .meet_rowheader_inner:hover{background:white}.meet_rowheader textarea{padding:3px}
+.meet_rowheader_scroll{cursor:default}.meet_shadow_forbidden .meet_shadow_inner{background-color:red}
+.meet_event_moving_source{opacity:.5;filter:alpha(opacity=50)}.meet_linkpoint{background-color:white;border:1px solid gray;border-radius:5px}
+.meet_linkpoint.meet_linkpoint_hover{background-color:black}.meet_event.meet_event_version .meet_event_inner{background-color:#cfdde8;background-image:linear-gradient(45deg,rgba(255,255,255,.2) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.2) 50%,rgba(255,255,255,.2) 75%,transparent 75%,transparent);background-size:20px 20px}
+.meet_crosshair_vertical,.meet_crosshair_horizontal,.meet_crosshair_left,.meet_crosshair_top{background-color:gray;opacity:.2;filter:alpha(opacity=20)}
+.meet_link_dot{border-radius:10px;background-color:red}.meet_task_milestone .meet_event_inner{position:absolute;top:16%;left:16%;right:16%;bottom:16%;background:#38761d;border:0 none;transform:rotate(45deg);filter:none}
+.meet_event_left{white-space:nowrap;padding-top:5px;color:#666;cursor:default}.meet_event_right{white-space:nowrap;padding-top:5px;color:#666;cursor:default}
+.meet_selectionrectangle{background-color:#00f;border:1px solid #003;opacity:.4}
+.meet_link_shadow{border:1px solid black}.meet_link_shadow_circle{background-color:black}
+.meet_block{background-color:gray;opacity:.5}

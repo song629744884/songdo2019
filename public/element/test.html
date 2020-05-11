@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>倩狐OA办公系统</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="/element/vue/index.css">
+    <!-- 引入组件库 -->
+    <script src="/element/vue/vue.js"></script>
+    <script src="/element/vue/axios.min.js"></script>
+    <script src="/element/vue/index.js"></script>
+    <script src="/element/vue/md5.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <!--商店分类管理 -->
+    <el-container>
+        <el-header>
+            <label>关键词：</label>
+            <el-input v-model="list.keywords" placeholder="请输入商店分类名称" style="width:auto;" @keyup.enter.native="list.page=1;list.query()"></el-input>
+            <el-button type="info" icon="el-icon-search" @click="list.page=1;list.query()">查询</el-button>
+            <el-button type="primary" icon="el-icon-plus" @click="handleEdit()" >新增</el-button>
+        </el-header>
+        <el-main>
+            <el-table
+                    ref="multipleTable"
+                    :data="list.items"
+                    tooltip-effect="dark"
+                    style="width: 100%"
+                    highlight-current-row
+                    @selection-change="list.selectionChange($event)">
+                <el-table-column
+                        type="selection"
+                        width="55">
+                </el-table-column>
+                <el-table-column
+                        type="index">
+                </el-table-column>
+                <el-table-column
+                        prop="name"
+                        label="名称"
+                        >
+                </el-table-column>
+
+                <el-table-column label="操作" >
+                    <template slot-scope="scope">
+                        <el-button size="mini" type="success" plain class="el-icon-folder-opened"
+                                   @click="handleEdit(scope.$index, scope.row)" >
+                            编辑
+                        </el-button>
+                        <el-button size="mini" type="danger" plain class="el-icon-delete" plain @click="handleDelete(scope.$index, scope.row)" >
+                            删除
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-main>
+    </el-container>
+
+    <!--添加修改表单 -->
+    <el-dialog  :title="addMenu.addMenuTitle" :visible.sync="addMenu.addMenuVisible">
+        <el-form ref="editForm" :model="editForm" :rules="editRules" :label-width="addMenu.formLabelWidth">
+            <el-form-item label="名称" required prop="name">
+                <el-input v-model="editForm.name" placeholder="请输入岗位名称"></el-input>
+            </el-form-item>
+            <el-form-item label="描述">
+                <el-input type="textarea" v-model="editForm.memo" placeholder="请输入岗位描述"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="setSubmit('editForm')">保存</el-button>
+                <el-button @click="addMenu.addMenuVisible = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+</div>
+
+
+<script>
+    function getCookie(name)
+    {
+        var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+        if(arr=document.cookie.match(reg))
+            return unescape(arr[2]);
+        else
+            return null;
+    }
+    function delCookie(name)
+    {
+        var exp = new Date();
+        exp.setTime(exp.getTime() - 1);
+        var cval=getCookie(name);
+        if(cval!=null)
+            document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+    }
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            list:{
+                items:[],
+                keywords:'',
+                query:function(){
+                    vm.data.getShopCategoryList(this);
+                },
+            },
+            addMenu: {
+                addMenuTitle: "添加",
+                addMenuVisible: false,
+                formLabelWidth: "110px",
+            },
+            multipleSelection: [],
+            editForm: {
+                name: '',
+                memo: '',
+            },
+            editRules: {
+                name: [
+                    {required: true, message: '请输入名称', trigger: 'blur'},
+                ],
+            },
+
+
+        },
+        created: function () {
+            this.getShopCategoryList(this.list);
+        },
+        mounted: function () {
+
+        },
+        computed: {},
+        methods: {
+            getShopCategoryList:function(obj){
+                let that = this;
+                obj.api_token = getCookie('_token');
+                axios.post('/shopCategoryApi/getShopCategoryList', obj)
+                    .then(function (response) {
+                        console.log(response);
+                        that.list.items = response.data.data
+                    }).catch(function (error) {
+
+                });
+            },
+            shopCategorySave:function(row){
+                let that = this;
+                row.api_token = getCookie('_token');
+                axios.post('/shopCategoryApi/shopCategorySave', row)
+                    .then(function (response) {
+                        console.log(response);
+                        that.getShopCategoryList(that.list);
+                        that.addMenu.addMenuVisible = false;
+                        setTimeout(_ => that.$refs.editForm.clearValidate(), 10);
+
+                    }).catch(function (error) {
+
+                });
+            },
+            shopCategoryDel:function(id){
+                axios.post('/shopCategoryApi/shopCategoryDel', {'api_token':getCookie('_token'),'id':id})
+                    .then(function (response) {
+                        console.log(response);
+                    }).catch(function (error) {
+
+                });
+            },
+            handleDelete(index, row) {
+                let that = this;
+                that.shopCategoryDel(row.id);
+            },
+            //添加、编辑菜单
+            handleEdit(index, row) {
+                this.addMenu.addMenuVisible = true;
+                if (row) {
+                    this.addMenu.addMenuTitle = '编辑';
+                    this.editForm = Object.assign({}, row);
+                } else {
+                    this.addMenu.addMenuTitle = '添加';
+                    this.editForm = {
+                        name: '',
+                        memo: '',
+
+                    };
+                }
+                let that = this;
+                setTimeout(_ => that.$refs.editForm.clearValidate(), 10)
+            },
+            setSubmit: function (formName) {
+                let that = this;
+                that.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        that.editForm.parentId = that.parentId;
+                        that.shopCategorySave(that.editForm);
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+
+        },
+        watch: {}
+    })
+</script>
+
+<style>
+    body {
+        background: white;
+    }
+</style>
+
+</body>
+</html>

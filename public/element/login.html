@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>songdo2020</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="/element/theme/index.css">
+    <!--<link rel="stylesheet" href="/element/theme/oa.css">-->
+    <!-- 引入组件库 -->
+    <script src="/element/vue/vue.js"></script>
+    <script src="/element/vue/axios.min.js"></script>
+    <script src="/element/vue/index.js"></script>
+
+</head>
+<body style="background-size: contain; background-repeat: no-repeat; background-position: center; background-color: #2168da;">
+<div id="app">
+    <div style="position: fixed;top: 0;bottom: 0;left: 0;right: 0;padding-top: 80px;">
+        <el-row>
+            <el-col :span="7" :offset="5" style="background: linear-gradient(to top, rgba(83,117,255,.4), rgba(83,117,255,1)); height: 120px; text-align: center;">
+                <h1 style="color:#fff; margin-top: 20px">倩狐在线办公</h1>
+                <h1 style="color:#fff;">AI智能系统</h1>
+            </el-col>
+            <el-col :span="7" style="background: linear-gradient(to top, rgba(255,255,255,.4), rgba(255,255,255,1)); position:relative;">
+                <!--<el-tooltip effect="light" content="点击此处扫码登录" placement="left">
+                    <div style="position:absolute;right: 0;color:#2f2f2f;font-size: .5rem;cursor:pointer;" @click="activeName=activeName==1?0:1"
+                         class="oa-icon-banjieerweima"></div>
+                </el-tooltip>-->
+                <div style="margin:10px; height: 160px;">
+                    <br/>
+                    <h3 style="color:#000;font-size: 16px;">登 录</h3>
+                    <br/>
+                    <el-form :model="form2" status-icon  ref="form2" :rules="rules" label-width="60px" v-show="activeName==0">
+                        <el-form-item label="账号" prop="mobile">
+                            <el-input  autocomplete="off" v-model="form2.email"  placeholder="请输入工号"></el-input>
+                        </el-form-item>
+                        <el-form-item label="密码" prop="pwd">
+                            <el-input type="password" v-model="form2.password"  autocomplete="off"  placeholder="***"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="submitForm('form2')">立即登录</el-button>
+                            <el-button type="primary" >修改密码</el-button>
+                        </el-form-item>
+                    </el-form>
+                    <!--<div ref="qrCode" id="qrCode" class="qrCode" v-show="activeName==1"></div>-->
+                </div>
+            </el-col>
+        </el-row>
+    </div>
+
+</div>
+</body>
+<script>
+
+    function getCookie(name)
+    {
+        var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+        if(arr=document.cookie.match(reg))
+            return unescape(arr[2]);
+        else
+            return null;
+    }
+    function delCookie(name)
+    {
+        var exp = new Date();
+        exp.setTime(exp.getTime() - 1);
+        var cval=getCookie(name);
+        if(cval!=null)
+            document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+    }
+    function setCookie(name,value,time)
+    {
+        var strsec = getsec(time);
+        var exp = new Date();
+        exp.setTime(exp.getTime() + strsec*1);
+        document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+    }
+    function getsec(str)
+    {
+        var str1=str.substring(1,str.length)*1;
+        var str2=str.substring(0,1);
+        if (str2=="s")
+        {
+            return str1*1000;
+        }
+        else if (str2=="h")
+        {
+            return str1*60*60*1000;
+        }
+        else if (str2=="d")
+        {
+            return str1*24*60*60*1000;
+        }
+    }
+    new Vue({
+        el: '#app',
+        data: {
+                dialogVisible: false,
+                activeName: '',
+
+                form2: {
+                    email: '',
+                    password: '',
+                },
+                form3: {
+                    mobile: '',
+                    pwd: '',
+                    pwd1: '',
+                    pwd2: '',
+                },
+            rules: {
+                email: [{required: true, message: '请输入账号', trigger: 'blur'}],
+                password: [{required: true, message: '请输入密码', trigger: 'blur'}],
+            },
+
+        },
+        methods: {
+            submitForm:function(formName) {
+                let that = this;
+                that.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        axios.post('/elementLogin', that.form2)
+                            .then(function (response) {
+                                //console.log(response);
+                                setCookie('_token',response.data.token,'d1');
+                                location.href='/element/admin.html';
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+                    } else {
+                        return false;
+                    }
+                });
+
+
+            },
+
+
+        },
+       /* watch: {
+            activeName: function (val, oldVal) {
+
+
+            }
+        },*/
+    })
+</script>
+<!--<script>
+    let timer = {}, qrcode = null;
+    let vm = {
+        data: {
+            dialogVisible: false,
+            activeName: '',
+            form: {
+                jobnum: '',
+                code: '',
+            },
+            form2: {
+                mobile: '',
+                pwd: '',
+            },
+            form3: {
+                mobile: '',
+                pwd: '',
+                pwd1: '',
+                pwd2: '',
+            },
+            rules: {
+                jobnum: [{required: true, message: '请输入工号', trigger: 'blur'}],
+                code: [{required: true, message: '请输入动态码', trigger: 'blur'}],
+                mobile: [{required: true, message: '请输入账号', trigger: 'blur'}],
+                pwd: [{required: true, message: '请输入密码', trigger: 'blur'}],
+                pwd1: [
+                    {
+                        required: true,
+                        validator: (rule, value, callback) => {
+                            if (value === '') {
+                                callback(new Error('请输入密码'));
+                            } else {
+                                if (vm.data.form3.pwd2 !== '') {
+                                    http.$refs.form3.validateField('pwd2');
+                                }
+                                callback();
+                            }
+                        }, trigger: 'blur'
+                    }
+                ],
+                pwd2: [
+                    {
+                        required: true,
+                        validator: (rule, value, callback) => {
+                            if (value === '') {
+                                callback(new Error('请再次输入密码'));
+                            } else if (value !== vm.data.form3.pwd1) {
+                                callback(new Error('两次输入密码不一致!'));
+                            } else {
+                                callback();
+                            }
+                        }, trigger: 'blur'
+                    }
+                ]
+            },
+            login: {
+                xurl: '/ucenter/user/login',
+                afterQuery: function (json) {
+                    if (json.res == 1) {
+                        if ($is(json.data.ukey)) {
+                            appConf.setUserKey(json.data.ukey);
+                            if ($is(appConf.getUserKey())) {
+                                let loginWebUrl = vm.getCookie('loginWebUrl');
+                                setTimeout(() => window.location = (loginWebUrl === '' ? '/ui/oa2/admin.html' : loginWebUrl), 500);
+                            } else {
+                                http.$alert('cookie保存失败，请按ctrl+shift+del清除cookie');
+                            }
+                        } else {
+                            http.$alert('ukey为空，无法登录');
+                        }
+                    } else if (json.code == 400) {
+                        this.parent.dialogVisible = true
+                    }
+                }
+            },
+            login2: {
+                xurl: '/ucenter/user/login2',
+                afterQuery: function (json) {
+                    if (json.res == 1) {
+                        if ($is(json.data.ukey)) {
+                            appConf.setUserKey(json.data.ukey);
+                            if ($is(appConf.getUserKey())) {
+                                let loginWebUrl = vm.getCookie('loginWebUrl');
+                                vm.setCookie('loginWebUrl', null, -1);
+                                setTimeout(() => window.location = (loginWebUrl === '' ? '/ui/oa2/admin.html' : loginWebUrl), 500);
+                            } else {
+                                http.$alert('cookie保存失败，请按ctrl+shift+del清除cookie');
+                            }
+                        } else {
+                            http.$alert('ukey为空，无法登录');
+                        }
+                    } else if (json.code == 400) {
+                        this.parent.dialogVisible = true
+                    }
+                }
+            },
+            setPassword: {
+                xurl: "/ucenter/user/chPwd2",
+                afterQuery: function (json) {
+                    if (json.res == 1) {
+                        http.$alert('修改密码成功！');
+                        vm.data.dialogVisible = false;
+                    }
+                }
+            },
+            ajax: {
+                url: 'http://app.hta.ink/wechat/user/ajax',
+                cid: '',
+                afterQuery: function (json) {
+                    if (json.res == 1) {
+                        if (json.isok) {
+                            this.parent.login.query(json.items);
+                        }
+                    }
+                }
+            },
+        },
+        created() {
+            appConf.setUserKey("");
+        },
+        methods: {
+            submitForm(formName) {
+                let that = this;
+                that.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        if (formName == "form") {
+                            that.login.query(that.form);
+                        } else if (formName == "form3") {
+                            that.setPassword.query(that.form3);
+                        } else if (formName == "form2") {
+                            that.form3.mobile = that.form2.mobile + "";
+                            that.login2.query(that.form2);
+                        }
+                    } else {
+                        return false;
+                    }
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            },
+            getQrcode: function () {
+                qrcode.clear();
+                qrcode.makeCode("http://app.hta.ink/wechat/user/login?cid=" + this.identifying());
+            },
+            identifying: function () {
+                let key = appConf.getKey();
+                if (key == "") {
+                    key = randomFrom(3000, 8000) + "" + randomFrom(8000, 9000);
+                    appConf.setKey(key)
+                }
+                return randomFrom(1000, 2000) + "" + key + "" + randomFrom(2000, 3000) + "" + Math.round(new Date().getTime() / 1000);
+            },
+            handleClose(done) {
+                this.$confirm('确认关闭？')
+                    .then(_ => {
+                        done();
+                    })
+                    .catch(_ => {
+                    });
+            }
+        },
+        watch: {
+            activeName: function (val, oldVal) {
+                let that = this;
+                if (val == 1) {
+                    qrcode = new QRCode(that.$refs.qrCode, {
+                        text: "http://app.hta.ink/wechat/user/login?cid=" + this.identifying(),
+                        width: 130,
+                        height: 130,
+                        title: '',
+                        colorDark: '#000000',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                    timer[0] = setInterval(_ => {
+                        that.getQrcode();
+                    }, 30 * 1000);
+                    timer[1] = setInterval(_ => {
+                        that.ajax.cid = that.identifying();
+                        that.ajax.query(that.ajax.afterQuery, false);
+                    }, 3 * 1000);
+                } else {
+                    clearInterval(timer[0]);
+                    clearInterval(timer[1]);
+                    qrcode = null;
+                    that.$refs.qrCode.innerHTML = "";
+                }
+            }
+        }
+    };
+    // document.body.style.backgroundImage = "url('http://img.infinitynewtab.com/wallpaper/" + randomFrom(300, 3000) + ".jpg')";
+    document.body.style.backgroundImage = "url('bg.jpg')";
+</script>-->
+
+<style>
+    body {
+        color: #999;
+        background-size: cover;
+    }
+
+    .qrCode {
+        width: 2rem;
+        height: 2rem;
+        margin: auto;
+        text-align: center;
+    }
+
+    .qrCode img {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+</style>
+
+<style>
+</style>
+
+</html>

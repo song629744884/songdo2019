@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>倩狐OA办公系统</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="/element/vue/index.css">
+    <!--<link rel="stylesheet" href="/element/vue/oa.css">-->
+    <!--<link rel="stylesheet" href="/element/vue/bpmn.css">-->
+    <!--<link rel="stylesheet" href="/element/vue/meet.css">-->
+    <!-- 引入组件库 -->
+    <script src="/element/vue/vue.js"></script>
+    <script src="/element/vue/axios.min.js"></script>
+    <script src="/element/vue/index.js"></script>
+    <script src="/element/vue/md5.min.js"></script>
+</head>
+
+<body>
+<div id="app">
+    <el-col :span="24" class="main-top">
+        <el-row>
+            <el-col :span="4" class="logo-text">
+                <div @click="addTab('index','首页')">倩狐OA办公系统</div>
+            </el-col>
+            <el-col :span="20">
+                <el-col class="logo-link" :span="7" :offset="17">
+                    <i class="oa-icon-cangku" @click="addTab('index','首页')"></i>
+                    <i class="oa-icon-xinxiang" @click="addTab('./msg/message.html','总经理信箱')"></i>
+                    <i class="oa-icon-xiaoxi" @click="addTab('./msg/msgReminding.html','我的消息')">
+
+                    </i>
+                    <i class="oa-icon-yiwen" @click="addTab('/ui/oa/help/','帮助中心')"></i>
+                    <i  class="avatar"
+                       @click="addTab('./user/modifyPer.html','个人资料')">
+                </el-col>
+            </el-col>
+        </el-row>
+    </el-col>
+    <el-col :span="24" class="main-center" >
+        <el-row style="height: 100%">
+            <el-col :span="4" class="center-menu" >
+                <div class="menu-tab">
+                    <div style="height: 0.1rem;"></div>
+                    <ul>
+                        <li  :class="['ico-link','cursor']"
+                            @click="set_link_id(0)">
+                            <el-row :span="12"><i class="oa-icon-guanbi"></i></el-row>
+                            <el-row :span="12">菜单</el-row>
+                        </li>
+                        <li class="ico-link exit" @click="exit">
+                            <el-row :span="12"><i class="oa-icon-guanbi"></i></el-row>
+                        </li>
+                    </ul>
+                </div>
+                <div class="menu-tab-link">
+                    <ul>
+                        <el-collapse >
+                            <el-collapse-item  class="link-title">
+                                <template slot="title">
+                                    <b>店铺管理</b>
+                                </template>
+                                <ul>
+                                    <li  class="sub-link"
+                                        @click="addTab('shops/category.html','店铺分类')">店铺分类
+                                    </li>
+                                    <li  class="sub-link"
+                                         @click="addTab('shops/info.html','店铺信息')">店铺信息
+                                    </li>
+                                </ul>
+                            </el-collapse-item>
+                            <el-collapse-item  class="link-title">
+                                <template slot="title">
+                                    <b>商品管理</b>
+                                </template>
+                                <ul>
+                                    <li  class="sub-link"
+                                         @click="addTab('goods/category.html','商品分类')">商品分类
+                                    </li>
+                                    <li  class="sub-link"
+                                         @click="addTab('goods/index.html','商品列表')">商品列表
+                                    </li>
+                                </ul>
+                            </el-collapse-item>
+                            <el-collapse-item  class="link-title">
+                                <template slot="title">
+                                    <b>系统设置</b>
+                                </template>
+                                <ul>
+                                    <li  class="sub-link"
+                                         @click="addTab('user/userInfo.html','个人资料')">个人资料
+                                    </li>
+                                    <li  class="sub-link"
+                                         @click="addTab('user/person.html','修改资料')">修改资料
+                                    </li>
+                                </ul>
+                            </el-collapse-item>
+                        </el-collapse>
+                    </ul>
+                </div>
+            </el-col>
+            <el-col :span="20" class="center-box">
+                <el-tabs v-model="editableTabsValue" class="frame-tab" type="card" closable @tab-remove="removeTab">
+                    <el-tab-pane v-for="(item, index) in editableTabs" :key="item.name" :label="item.title"
+                                 :name="item.name" v-html="item.content">
+                    </el-tab-pane>
+                </el-tabs>
+            </el-col>
+        </el-row>
+    </el-col>
+</div>
+</body>
+
+<script>
+    function getCookie(name)
+    {
+        var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+        if(arr=document.cookie.match(reg))
+            return unescape(arr[2]);
+        else
+            return null;
+    }
+    function delCookie(name)
+    {
+        var exp = new Date();
+        exp.setTime(exp.getTime() - 1);
+        var cval=getCookie(name);
+        if(cval!=null)
+            document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+    }
+    new Vue({
+        el: '#app',
+        data: {
+            activeNames: [],
+            isHideMenu: false,
+            icon_link_id: 0,
+            editableTabsValue: 'index',
+            editableTabs: [{
+                title: '首页',
+                name: 'index',
+                content: '<iframe src="console.html"></iframe>'
+            }],
+        },
+        mounted: function () {
+
+        },
+        created: function () {
+            this.getMenus();
+        },
+        methods: {
+            getMenus:function(){
+                axios.post('/getMenus', {'api_token':getCookie('_token')})
+                    .then(function (response) {
+                   console.log(response);
+                }).catch(function (error) {
+
+                });
+            },
+            exit:function(){
+                axios.post('/user/logout', {'api_token':getCookie('_token')})
+                .then(function (response) {
+                    //console.log(response);
+                    delCookie('_token');
+                    location.href='/element/login.html';
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+            set_link_id(id) {
+                let that = this;
+                that.icon_link_id = id;
+            },
+            addTab(url, title) {
+                let that = this;
+                if (url == 'index')
+                    that.editableTabsValue = 'index';
+                else {
+                    let tabs = that.editableTabs,
+                        skip = false;
+                    tabs.forEach((tab, index) => {
+                        if (tab.name === md5(url)) {
+                            skip = true
+                        }
+                    });
+                    if (!skip) {
+                        that.editableTabs.push({
+                            title: title,
+                            name: md5(url),
+                            content: '<iframe src="' + url + '" allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen"></iframe>'
+                        });
+                    }
+                    that.editableTabsValue = md5(url);
+                }
+            },
+            removeTab(targetName) {
+                let that = this;
+                if (targetName == 'index') return;
+                let tabs = that.editableTabs;
+                let activeName = that.editableTabsValue;
+                if (activeName === targetName) {
+                    tabs.forEach((tab, index) => {
+                        if (tab.name === targetName) {
+                            let nextTab = tabs[index + 1] || tabs[index - 1];
+                            if (nextTab) {
+                                activeName = nextTab.name;
+                            }
+                        }
+                    });
+                }
+                that.editableTabsValue = activeName;
+                that.editableTabs = tabs.filter(tab => tab.name !== targetName);
+            },
+
+        },
+    })
+</script>
+
+<style>
+    .main-top{background:#7b55cf;height:.6rem}.main-top .logo-text{color:white;font-size:.28rem;padding:.12rem 0;text-align:center;letter-spacing:.05rem;cursor:pointer}
+    .main-top .logo-link{text-align:right;z-index:10}.main-top .logo-link i{letter-spacing:.11rem;padding-top:.16rem;color:white;font-size:.28rem;cursor:pointer;display:inline-block;position:relative}
+    .main-top .logo-link span{color:white;font-size:.12rem;display:inline-block;position:relative;line-height:1;vertical-align:baseline}
+    .main-top .logo-link i .el-badge{letter-spacing:normal;position:absolute;left:.15rem;top:.1rem}
+    .main-top .logo-link .avatar img{width:.24rem;height:.24rem;border-radius:50%;border:1px solid #fff;background-color:#fff}
+    .main-center{height:calc(100% - .6rem)}.main-center .center-box{background:#e7ebee;height:100%;border-left:1px solid #e7ebee}
+    .main-center .center-menu{height:100%;display:flex}.main-center .center-menu .menu-tab{background:#7b55cf;margin:.16rem 0 0 .16rem;width:.6rem;border-radius:.04rem;height:calc(100% - .32rem);text-align:center;color:#d0bff6;overflow:hidden}
+    .main-center .center-menu i{font-size:.18rem}.main-center .center-menu ul .ico-link{padding:.1rem;cursor:pointer;position:relative}
+    .main-center .center-menu ul .ico-link.exit{position:absolute;bottom:.2rem;width:.31rem}
+    .main-center .center-menu ul .ico-link.cursor{color:white}.main-center .center-menu ul .ico-link:hover{background:#d0bff6;color:#7b55cf}
+    .main-center .center-menu ul .ico-link.cursor::before{font-family:"oafont" !important;content:"\e60d";position:absolute;font-size:.25rem;right:-0.07rem;color:white}
+    .main-center .menu-tab-link{padding:0 .16rem;width:calc(100% - .6rem);overflow:auto}
+    .main-center .menu-tab-link .link-title{color:black;font-weight:bold;text-indent:.12rem;line-height:.36rem;display:block}
+    .main-center .menu-tab-link .link-title .sub-link:hover{color:#7b55cf;background:#ebebeb;cursor:pointer;border-radius:.04rem}
+    .main-center .menu-tab-link .link-title .sub-link{color:#333;font-weight:normal;line-height:.3rem;text-indent:.12rem}
+    .main-center .center-box .frame-tab{height:100%;z-index:5;position:relative}.main-center .center-box .frame-tab .el-tabs__content{height:100%}
+    .main-center .center-box .frame-tab .el-tabs__content .el-tab-pane{height:100%}.main-center .center-box .frame-tab .el-tabs__content .el-tab-pane iframe{width:100%;height:100%;border:0}
+    .main-center .center-box .frame-tab .el-tabs__nav{border:0}.main-center .center-box .frame-tab .el-tabs__header{position:absolute;top:-0.32rem;border:0;margin:0;width:78%}
+    .main-center .center-box .frame-tab .el-tabs__item{border:0;height:.32rem;line-height:.32rem;color:white}
+    .main-center .center-box .frame-tab .el-tabs__item .el-icon-close:hover{background:red}
+    .main-center .center-box .frame-tab .el-tabs__item.is-active{background:#d0bff6;border-top-left-radius:.04rem;border-top-right-radius:.04rem;color:#333}
+</style>
+
+</html>
