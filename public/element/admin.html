@@ -151,7 +151,7 @@
         },
         methods: {
             getMenus:function(){
-                axios.post('/getMenus', {'api_token':getCookie('_token')})
+                axios.post('/api/getMenus', {'api_token':getCookie('_token')})
                     .then(function (response) {
                    console.log(response);
                 }).catch(function (error) {
@@ -159,7 +159,7 @@
                 });
             },
             exit:function(){
-                axios.post('/user/logout', {'api_token':getCookie('_token')})
+                axios.post('/api/user/logout', {'api_token':getCookie('_token')})
                 .then(function (response) {
                     //console.log(response);
                     delCookie('_token');

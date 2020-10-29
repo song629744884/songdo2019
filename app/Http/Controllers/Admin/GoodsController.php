@@ -20,7 +20,7 @@ class GoodsController extends Controller
     {
         //
         $name = $request->input('name');
-        $lists = GoodsModel::name($name)->paginate(15);
+        $lists = GoodsModel::getList($name);
         return view('goods.index',['lists'=>$lists]);
     }
 
@@ -54,20 +54,12 @@ class GoodsController extends Controller
             'goods_category_id'=>'required',
         ]);
         $model = new GoodsModel();
-        $requests = $request->all();
-        $file = isset($requests['file'])?$requests['file']:null;
-        $file && $model->photo = GoodsModel::upload_img($file,'uploads/goods');
+        if($model->handleInsert($request)){
+            return redirect('goods')->with('success','goods inserted');
+        }
+        return redirect()->with('error','faild to inserte goods');
 
-        $model->name = $request->input('name');
-        $model->intro = $request->input('intro');
-        $model->price = $request->input('price');
-        $model->cost_price = $request->input('cost_price');
-        $model->number = $request->input('number');
-        $model->shop_id = $request->input('shop_id');
-        $model->goods_category_id = $request->input('goods_category_id');
-        $model->createTime = date('Y-m-d H:i:s');
-        $model->save();
-        return redirect('goods')->with('success','goods inserted');
+
     }
 
     /**
@@ -113,22 +105,13 @@ class GoodsController extends Controller
             'shop_id'=>'required',
             'goods_category_id'=>'required',
         ]);
-        $model = GoodsModel::findOrFail($id);
-        $requests = $request->all();
-        $file = isset($requests['file'])?$requests['file']:null;
-        $file && $model->photo = GoodsModel::upload_img($file,'uploads/goods');
+        $model = new GoodsModel();
+        if($model->handleUpdate($id,$request)){
+            return redirect('goods')->with('success','goods updated');
+        }
+        return redirect()->with('error','faild to update goods');
 
-        $model->name = $request->input('name');
-        $model->intro = $request->input('intro');
-        $model->price = $request->input('price');
-        $model->cost_price = $request->input('cost_price');
-        $model->number = $request->input('number');
-        $model->shop_id = $request->input('shop_id');
-        $model->goods_category_id = $request->input('goods_category_id');
-        //dd($model->goods_category_id);
-        $model->updateTime = date('Y-m-d H:i:s');
-        $model->save();
-        return redirect('goods')->with('success','goods updated');
+
     }
 
     /**
@@ -140,8 +123,10 @@ class GoodsController extends Controller
     public function destroy($id)
     {
         //
-        $model = GoodsModel::findOrFail($id);
-        $model->delete();
-        return redirect('goods')->with('success','goods deleted');
+
+        if(GoodsModel::deleteById($id)){
+            return redirect('goods')->with('success','goods deleted');
+        }
+        return redirect()->with('error','faild to delete goods');
     }
 }

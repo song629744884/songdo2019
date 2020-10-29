@@ -16,3 +16,14 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::any('unAuth', function () {
+    return response()->json(['code' => 0,'msg' => '未认证或认证失败']);
+})->name('unAuth');
+Route::middleware(['auth:api'])->group(function () {
+    Route::post('user/logout','Admin\UserController@logout');
+    Route::post('getMenus','Admin\RightController@getMenus');
+    Route::post('shopCategoryApi/getShopCategoryList','Admin\ShopCategotyController@getShopCategoryList');
+    Route::post('shopCategoryApi/shopCategorySave','Admin\ShopCategotyController@shopCategorySave');
+    Route::post('shopCategoryApi/shopCategoryDel','Admin\ShopCategotyController@shopCategoryDel');
+});

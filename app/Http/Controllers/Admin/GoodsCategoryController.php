@@ -17,7 +17,7 @@ class GoodsCategoryController extends Controller
     {
         //
         $name = $request->input('name');
-        $lists = GoodsCategoryModel::name($name)->paginate(15);
+        $lists = GoodsCategoryModel::getList($name);
         return view('goodsCategory.index',['lists'=>$lists]);
     }
 
@@ -45,10 +45,11 @@ class GoodsCategoryController extends Controller
             'name'=>'required',
         ]);
         $model = new GoodsCategoryModel();
-        $model->name = $request->input('name');
-        $model->createTime = date('Y-m-d H:i:s');
-        $model->save();
-        return redirect('goodsCategory')->with('success','goodsCategory inserted');
+        if($model->handleInsert($request)){
+            return redirect('goodsCategory')->with('success','goodsCategory inserted');
+        }
+        return redirect()->with('error','faild to inserte goodsCategory');
+
     }
 
     /**
@@ -60,7 +61,7 @@ class GoodsCategoryController extends Controller
     public function show($id)
     {
         //
-        $data = GoodsCategoryModel::findOrFail($id);
+        $data = GoodsCategoryModel::findById($id);
         return view('goodsCategory.show',['data'=>$data]);
     }
 
@@ -88,11 +89,11 @@ class GoodsCategoryController extends Controller
         $request->validate([
             'name'=>'required',
         ]);
-        $model = GoodsCategoryModel::findOrFail($id);
-        $model->name = $request->input('name');
-        $model->updateTime = date('Y-m-d H:i:s');
-        $model->save();
-        return redirect('goodsCategory')->with('success','goodsCategory updated');
+        $model = new GoodsCategoryModel();
+        if($model->handleUpdate($id,$request)){
+            return redirect('goodsCategory')->with('success','goodsCategory updated');
+        }
+        return redirect()->with('error','faild to update goodsCategory');
 
     }
 
@@ -105,8 +106,10 @@ class GoodsCategoryController extends Controller
     public function destroy($id)
     {
         //
-        $model = GoodsCategoryModel::findOrFail($id);
-        $model->delete();
-        return redirect('goodsCategory')->with('success','goodsCategory deleted');
+        if(GoodsCategoryModel::deleteById($id)){
+            return redirect('goodsCategory')->with('success','goodsCategory deleted');
+        }
+        return redirect()->with('error','faild to delete goodsCategory');
+
     }
 }

@@ -47,17 +47,8 @@ Route::middleware(['web','admin'])->group(function () {
 
 });
 
-Route::any('unAuth', function () {
-    return response()->json(['code' => 0,'msg' => '未认证或认证失败']);
-})->name('unAuth');
+
 Route::post('elementLogin','Admin\UserController@login');
-Route::middleware(['api'])->group(function () {
-   Route::post('user/logout','Admin\UserController@logout');
-   Route::post('getMenus','Admin\RightController@getMenus');
-   Route::post('shopCategoryApi/getShopCategoryList','Admin\ShopCategotyController@getShopCategoryList');
-   Route::post('shopCategoryApi/shopCategorySave','Admin\ShopCategotyController@shopCategorySave');
-   Route::post('shopCategoryApi/shopCategoryDel','Admin\ShopCategotyController@shopCategoryDel');
-});
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

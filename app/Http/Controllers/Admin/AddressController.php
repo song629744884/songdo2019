@@ -12,12 +12,12 @@ class AddressController extends Controller
     //
     public function myAddressList(){
         $userId = Auth::id();
-        $lists = AddressModel::where('user_id',$userId)->get();
+        $lists = AddressModel::getList($userId);
         return view('address.myAddress',['lists'=>$lists]);
     }
 
     public function myAddressDetail($id){
-        $data = AddressModel::findOrfail($id);
+        $data = AddressModel::findById($id);
         return view('address.myAddressDetai',['data'=>$data]);
     }
 
@@ -28,13 +28,13 @@ class AddressController extends Controller
             'tag'=>'required',
         ]);
         $model = new AddressModel();
-        $model->user_id = Auth::id();
-        $model->place = $request->input('place');
-        $model->house_nuber = $request->input('house_nuber');
-        $model->tag = $request->input('tag');
-        $model->createTime = date('Y-m-d H:i:s');
-        $model->save();
-        return 'ok';
+        if($model->handleInsert($request)){
+            return redirect('address')->with('success','address inserted');
+        }
+        return redirect()->with('error','faild to inserte address');
+
+
+
     }
 
     public function myAddressUpdate(Request $request, $id){
@@ -43,21 +43,21 @@ class AddressController extends Controller
             'house_nuber'=>'required',
             'tag'=>'required',
         ]);
-        $model = AddressModel::findOrFail($id);
-        $model->user_id = Auth::id();
-        $model->place = $request->input('place');
-        $model->house_nuber = $request->input('house_nuber');
-        $model->tag = $request->input('tag');
-        $model->updateTime = date('Y-m-d H:i:s');
-        $model->save();
-        return 'ok';
+
+        $model = new AddressModel();
+        if($model->handleUpdate($id,$request)){
+            return redirect('address')->with('success','address updated');
+        }
+        return redirect()->with('error','faild to update address');
+
     }
 
     public function destroy($id)
     {
         //
-        $model = AddressModel::findOrFail($id);
-        $model->delete();
-        return 'ok';
+        if(AddressModel::deleteById($id)){
+            return redirect('address')->with('success','address deleted');
+        }
+        return redirect()->with('error','faild to delete address');
     }
 }

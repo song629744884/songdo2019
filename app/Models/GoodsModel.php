@@ -37,4 +37,53 @@ class GoodsModel extends Model
             return 1; //没有图片
         }
     }
+
+    public static function getList($name)
+    {
+
+        return self::name($name)->paginate(15);
+    }
+
+    public function handleInsert($request)
+    {
+        $requests = $request->all();
+        $file = isset($requests['file'])?$requests['file']:null;
+        $file && $this->photo = self::upload_img($file,'uploads/goods');
+
+        $this->name = $request->input('name');
+        $this->intro = $request->input('intro');
+        $this->price = $request->input('price');
+        $this->cost_price = $request->input('cost_price');
+        $this->number = $request->input('number');
+        $this->shop_id = $request->input('shop_id');
+        $this->goods_category_id = $request->input('goods_category_id');
+        $this->createTime = date('Y-m-d H:i:s');
+        return $this->save();
+    }
+
+    public function handleUpdate($id,$request)
+    {
+        $model = self::findOrFail($id);
+        $requests = $request->all();
+        $file = isset($requests['file'])?$requests['file']:null;
+        $file && $model->photo = self::upload_img($file,'uploads/goods');
+
+        $model->name = $request->input('name');
+        $model->intro = $request->input('intro');
+        $model->price = $request->input('price');
+        $model->cost_price = $request->input('cost_price');
+        $model->number = $request->input('number');
+        $model->shop_id = $request->input('shop_id');
+        $model->goods_category_id = $request->input('goods_category_id');
+        //dd($model->goods_category_id);
+        $model->updateTime = date('Y-m-d H:i:s');
+        return $model->save();
+    }
+
+    public static function deleteById($id)
+    {
+        $model = self::findOrFail($id);
+        return $model->delete();
+    }
+
 }
